@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeminiFlix</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type='text/javascript' src='//pl27706575.revenuecpmgate.com/43/08/fd/4308fd0c92978073c8ed9c0d58c16d99.js'></script>
+<style>
+/* Custom styles to perfect the Netflix look */
+body {
+background-color: #141414;
+font-family: 'Inter', sans-serif;
+}
+/* Hides the scrollbar but allows scrolling in movie rows */
+.scrollbar-hide::-webkit-scrollbar {
+display: none;
+}
+.scrollbar-hide {
+-ms-overflow-style: none; /* IE and Edge */
+scrollbar-width: none; /* Firefox */
+}
+/* Creates the fade-out effect at the bottom of the banner */
+.banner-fade-bottom {
+height: 7.4rem;
+background-image: linear-gradient(180deg, transparent, rgba(37,37,37,.61), #141414);
+}
+/* Ensures the video player maintains a 16:9 aspect ratio */
+#modal-video-container {
+aspect-ratio: 16 / 9;
+}
+/* Styles for the scroll arrows on movie rows */
+.scroll-arrow {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+background-color: rgba(0, 0, 0, 0.5);
+color: white;
+border: none;
+padding: 0.5rem;
+cursor: pointer;
+z-index: 10;
+opacity: 0;
+transition: opacity 0.3s ease-in-out;
+border-radius: 9999px; /* fully rounded */
+width: 2.5rem; /* 40px */
+height: 2.5rem; /* 40px */
+}
+.row-container:hover .scroll-arrow {
+opacity: 1;
+}
+.scroll-arrow.left {
+left: 0.5rem;
+}
+.scroll-arrow.right {
+right: 0.5rem;
+}
+</style>
+</head>
+<body class="text-white">
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 p-4 transition-colors duration-500">
+<div class="flex justify-between items-center">
+<div>
+<a href="#" class="text-2xl md:text-3xl font-extrabold text-red-600 no-underline hoverpacity-80 transition">
+GeminiFlix
+</a>
+<p class="text-xs text-gray-400 mt-1">Created By : Damn-YankeeS - PhCorner Elites DevOps</p>
+</div>
+<img class="h-8 w-8 rounded" src="https://placehold.co/32x32/E50914/FFFFFF?text=G" alt="Profile Avatar">
+</div>
+</nav>
+<header id="banner" class="relative text-white object-cover bg-cover bg-center" style="height: 56.25vw; max-height: 800px;">
+<div class="ml-8 pt-48 mdt-56 h-full">
+<h1 id="banner-title" class="text-3xl md:text-6xl font-extrabold pb-2"></h1>
+<div class="flex space-x-2 my-4">
+<button id="banner-play-btn" class="bg-white text-black font-bold rounded px-6 mdx-8 py-2 hover:bg-gray-300 transition text-sm md:text-base flex items-center justify-center">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
+<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+</svg>
+Play
+</button>
+<button id="banner-info-btn" class="bg-gray-500 bg-opacity-70 text-white font-bold rounded px-6 mdx-8 py-2 hover:bg-gray-600 transition text-sm md:text-base">
+More Info
+</button>
+</div>
+<p id="banner-description" class="w-full md:w-[45rem] max-w-sm md:max-w-md pt-2 text-xs md:text-sm h-24"></p>
+</div>
+<div class="absolute bottom-0 left-0 right-0 banner-fade-bottom"></div>
+</header>
+<main id="movie-rows" class="px-4 mdx-10 pb-16">
+</main>
+<div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+<div id="modal-container" class="relative bg-zinc-900 w-full max-w-4xl rounded-lg shadow-lg overflow-hidden">
+<button id="modal-close-btn" class="absolute top-3 right-3 text-white bg-black bg-opacity-50 rounded-full h-8 w-8 flex items-center justify-center z-20 hover:bg-opacity-75 transition">
+<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+</svg>
+</button>
+<div id="modal-video-container" class="w-full bg-black">
+<iframe id="youtube-player" class="w-full h-full" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<div id="no-trailer-message" class="hidden w-full h-full flex items-center justify-center text-lg">Trailer not available</div>
+</div>
+<div id="modal-details" class="p-6">
+<h2 id="modal-title" class="text-2xl font-bold"></h2>
+<p id="modal-description" class="text-sm mt-2 text-zinc-300"></p>
+<div id="watch-providers" class="mt-4">
+<h3 class="text-lg font-semibold">Watch Now On:</h3>
+<div id="providers-list" class="flex flex-wrap gap-4 mt-2"></div>
+<p id="no-providers-message" class="hidden text-zinc-400 mt-2">Streaming information not available for this region.</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+// --- CONFIGURATION ---
+const API_KEY = '94989cd5ae849628699ea66a20f8978f'; 
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original/';
+// 💥 ADSTERRA DIRECT LINK UPDATED HERE 💥
+const ADSTERRA_URL = 'https://www.revenuecpmgate.com/mrqc569xfb?key=ee6ff1b12243e8f797b5b4d28d4a5bfd';
+// *** NEW: Set your preferred country region for streaming providers (e.g., 'US', 'GB', 'CA', 'PH') ***
+const DEFAULT_REGION = 'US'; 
+
+// API endpoints for different movie categories
+const requests = {
+fetchNetflixOriginals: `/discover/tv?api_key=${API_KEY}&with_networks=213`,
+fetchTrending: `/trending/all/week?api_key=${API_KEY}&language=en-US`,
+fetchTopRated: `/movie/top_rated?api_key=${API_KEY}&language=en-US`,
+fetchActionMovies: `/discover/movie?api_key=${API_KEY}&with_genres=28`,
+fetchComedyMovies: `/discover/movie?api_key=${API_KEY}&with_genres=35`,
+fetchHorrorMovies: `/discover/movie?api_key=${API_KEY}&with_genres=27`,
+fetchRomanceMovies: `/discover/movie?api_key=${API_KEY}&with_genres=10749`,
+fetchSciFiMovies: `/discover/movie?api_key=${API_KEY}&with_genres=878`,
+fetchThrillerMovies: `/discover/movie?api_key=${API_KEY}&with_genres=53`,
+fetchAnimationMovies: `/discover/movie?api_key=${API_KEY}&with_genres=16`,
+fetchTvShows: `/discover/tv?api_key=${API_KEY}&with_genres=10759`,
+fetchDocumentaries: `/discover/movie?api_key=${API_KEY}&with_genres=99`,
+};
+// --- DOM ELEMENT SELECTORS ---
+const movieRowsContainer = document.getElementById('movie-rows');
+const modalOverlay = document.getElementById('modal-overlay');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const youtubePlayer = document.getElementById('youtube-player');
+
+// --- CORE FUNCTIONS ---
+async function fetchData(endpoint) {
+try {
+const response = await fetch(`https://api.themoviedb.org/3${endpoint}`);
+if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+const data = await response.json();
+return data.results;
+} catch (error) {
+console.error("Error fetching data:", error);
+if (API_KEY === 'YOUR_TMDB_API_KEY') {
+console.warn('Please replace "YOUR_TMDB_API_KEY" with your actual TMDB API key in the script section.');
+}
+return [];
+}
+}
+async function fetchMovieDetails(movieId, mediaType) {
+const type = mediaType === 'tv' ? 'tv' : 'movie';
+try {
+const url = `https://api.themoviedb.org/3/${type}/${movieId}?api_key=${API_KEY}&language=en-US&append_to_response=videos,watch/providers`;
+const response = await fetch(url);
+if (!response.ok) throw new Error('Failed to fetch details');
+return await response.json();
+} catch (error) {
+console.error("Error fetching movie details:", error);
+return null;
+}
+}
+function truncate(string, n) {
+return string?.length > n ? string.substr(0, n - 1) + '...' : string;
